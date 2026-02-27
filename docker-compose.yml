@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  nanotalon:
+    build: .
+    container_name: nanotalon
+    ports:
+      - "18790:18790"
+    volumes:
+      - ~/.nanotalon:/home/nonroot/.nanotalon
+      - ~/nanotalon-workspace:/workspace
+    environment:
+      - WORKSPACE_DIR=/workspace
+      - NANOTALON_WORKSPACE=/workspace
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "/nanotalon", "status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+networks:
+  default:
+    driver: bridge
